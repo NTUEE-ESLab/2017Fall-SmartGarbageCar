@@ -7,14 +7,16 @@
 //  Arduino D8 (SS RX) - BT TX no need voltage divider 
 //  Arduino D9 (SS TX) - BT RX through a voltage divider (5v to 3.3v)
 //
-#define PIN_SERVO 5
+#define PIN_SERVO_0 5
+#define PIN_SERVO_1 4
 
 #include <SoftwareSerial.h>
 SoftwareSerial BTserial(8,9); 
 // https://www.pjrc.com/teensy/td_libs_AltSoftSerial.html
 Servo LeftServo;
 Servo RightServo;
-Servo SGServo;
+Servo SGServo_0;
+Servo SGServo_1;
 
 char c=' ';
 boolean NL = true;
@@ -93,20 +95,33 @@ void backward(int t)
 
 void handup()
 {
-  for(int pos = 0; pos < 180; pos += 1) // goes from 0 degrees to 180 degrees 
+  for(int pos = 90; pos < 180; pos += 1) // goes from 0 degrees to 180 degrees 
   { // in steps of 1 degree 
-    SGServo.write(pos); // tell servo to go to position in variable 'pos' 
+    SGServo_0.write(pos); // tell servo to go to position in variable 'pos' 
+    SGServo_1.write(180-pos);
     delay(15); // waits 15ms for the servo to reach the position 
   }
 }
 
 void handdown()
 {
-  for(int pos = 180; pos>= 1; pos -= 1) // goes from 0 degrees to 180 degrees 
+  for(int pos = 180; pos> 90; pos -= 1) // goes from 0 degrees to 180 degrees 
   { // in steps of 1 degree 
-    SGServo.write(pos); // tell servo to go to position in variable 'pos' 
+    SGServo_0.write(pos); // tell servo to go to position in variable 'pos' 
+    SGServo_1.write(180-pos);
     delay(15); // waits 15ms for the servo to reach the position 
   }
+}
+
+void pick()
+{
+  SGServo_0.attach(PIN_SERVO_0);
+  SGServo_1.attach(PIN_SERVO_1);
+  handup();
+  delay(15);
+  handdown();
+  SGServo_0.detach();
+  SGServo_1.detach();
 }
 
 void start()
@@ -127,30 +142,6 @@ void stop_car()
   RightServo.write(1500);
 }
 
-void move_car()
-{
-  start();
-  if(left)
-  {
-    turn_left();
-  }
-  if(right)
-  {
-    turn_right();
-  }
-  if(tF > 0)
-  {
-    forward(tF);
-  }
-  if(tB > 0)
-  {
-    backward(tB);
-  }
-  stop_car();
-  handup();
-  handdown();
-}
-
 void config_input(char c){
     if (c == 'L'){
       READ_L = true;
@@ -164,6 +155,9 @@ void config_input(char c){
     else if (c == 'B'){
       READ_B = true;
     }
+    else if (c == 'P'){
+      pick();
+    }
     else{
    
       if (READ_F ){
@@ -174,6 +168,7 @@ void config_input(char c){
             READ_F = false;
             read_count = 0;
             tF = buf2num();
+            forward(tF);
         }
       }
       else if(READ_B){
@@ -185,12 +180,14 @@ void config_input(char c){
             read_count = 0;
             tB = buf2num();
             //print_data();
+            backward(tB);
         }
       }
       else if(READ_L){
         int n = c - 48;
         if (n==1){
           left = true;
+          turn_left();
         }
         else
         {
@@ -202,6 +199,7 @@ void config_input(char c){
         int n = c - 48;
         if (n==1){
           right = true;
+          turn_right();
         }
         else
         {
@@ -209,7 +207,6 @@ void config_input(char c){
         }
         READ_R=false;
         print_data();
-        move_car();
       }
     }
 }
@@ -224,7 +221,9 @@ void setup()
  
     BTserial.begin(9600);  
     Serial.println("BTserial started at 9600");
-    SGServo.attach(PIN_SERVO);
+    SGServo_0.attach(PIN_SERVO_0);
+    SGServo_1.attach(PIN_SERVO_1);
+
     start();
 }
  
