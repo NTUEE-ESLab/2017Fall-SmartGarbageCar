@@ -88,7 +88,7 @@ def main():
 	"""
     F<forward cycle>B<backwardcycle>L<1:turn left>R<1:turn right>[p:pick up]
     """
-	e.set_str("hello!F0050B0000L0R1!!!")
+	e.set_str("hello!F0050L1B0020R1!!!")
 	
 	if device != None:
 		e.set()
