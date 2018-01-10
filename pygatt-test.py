@@ -85,7 +85,9 @@ def main():
 	thread.start()
 	device = thread.device
 	print "====== device.char_write_handle() ====="
-	#write_str = "hello!X1010Y2525!!!"
+	"""
+    F<forward cycle>B<backwardcycle>L<1:turn left>R<1:turn right>[p:pick up]
+    """
 	e.set_str("hello!F0050B0000L0R1!!!")
 	
 	if device != None:
@@ -97,7 +99,7 @@ def main():
 	for i in range(5):
 		time.sleep(12)
 		#write_str = "smhX%d010Y%d525"%(i, i)
-		e.set_str("smhF00%d0B00%d0L0R1\n"%(i+2, i))
+		e.set_str("F00%d0B00%d0L%dR%dP\n"%(i+2, i, i%2, (i+1)%2))
 		#write_pos(device, write_uuid, write_str)
 		e.set()
 
