@@ -28,7 +28,7 @@ This is the picture of the detection while the left picture is the raw image see
 ![alt text](images/图片3.png)
 
 ### Navigation
-#### path
+#### Path
 One big problem of moving the car to pick up the garbage is to find an appropriate path. Since we do not have an extra camera on the car, it is impossible for the car to know where to go and we have to calculate the path for the car so that it can get to the right position. However, the direction of car can not be directly detected by the camera and it is changing all the time. Therefore, we record the original direction of the car at the inital stage, and recalculate it when the car moves.
 
 In this project, we first use a method of calculating the running average of the image provided by the camera, and use the image difference to detect the inital location of the car. Assuming that the car is in the view at the first place, such detection is done by calling the car to rotate a full cycle. After that we use the Median Flow tracker provided by OpenCV to track the movement of the car. Such tracker can be replaced by using Machine Learning technique to train a specific classifier for more accurate tracking and better detection in practice.
