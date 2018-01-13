@@ -4,11 +4,10 @@
 We got inspiration of this project from the video of an autonomous trash can on wheels that can position itself underneath pieces of garbage one tosses in its general vicinity. This original work is based on wireless communication with MicroSoft's motion sensing camera and a powerful program that can predict where the garbage will land. In consideration of our limited devices, we proposed this project to design a smart garbage car that can detect and clean up garbages in a small area. And we implemented it on Raspberry Pi and Arduino with technique of BLE and openCV.
 
 ## Dependency
-numpy
-
-openCV
-
-pygatt
+- numpy
+- openCV
+- pexpect
+- pygatt
 
 ## Implement
 The implement of this project is composed of three parts: 
@@ -89,3 +88,6 @@ Since it is very likely that the openCV program is not in the same file as the p
 To communicate with the main thread, we define a writing event. The main thread will wait for the event and start to process it after the event is set.
 
 Because Arduino communications with the HM10 module over serial connections and it reads information as a sequence of chars, so the commands sent from RPi to Arduino are encoded as a formed sequence of chars, which will be decoded char by char in the Arduino program.
+
+## Reference
+- [Home surveillance and motion detection with the Raspberry Pi, Python, OpenCV, and Dropbox](https://www.pyimagesearch.com/2015/06/01/home-surveillance-and-motion-detection-with-the-raspberry-pi-python-and-opencv/)
