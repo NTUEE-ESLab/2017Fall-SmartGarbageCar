@@ -22,4 +22,8 @@ One big problem of moving the car to pick up the garbage is to find an appropria
 ### Communication
 The Raspberry Pi and Arduino communicate with each other over BLE connection. In this project, the Arduino works as a BLE peripheral and provide GATT service, while the Raspberry Pi works as a central and a client. The transmission of information is implemented writing value to a GATT characteristic.
 #### BLE module
-We use an HM10 module to make the arduino work as a BLE peripheral. HM10 has 6 pins and we only need 4 of them in this case. When set up the module
+We use an HM10 module to make the arduino work as a BLE peripheral. HM10 has 6 pins and we only need 4 of them in this case. The RX and TX pin are connected to Arduino digital pins. The VCC and GND pin are also connected to 5V and GND on the Arduino respectively. 
+![alt text][img]
+
+[img]:http://fab.cba.mit.edu/classes/863.15/doc/tutorials/programming/bluetooth/bluetooth2.jpg "HM10 module"
+The HM10 module provides
