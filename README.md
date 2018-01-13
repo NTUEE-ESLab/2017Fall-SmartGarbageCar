@@ -10,8 +10,7 @@ The implement of this project is composed of three parts:
 - the communication between car and Raspberry Pi
 
 ### Movement
-#### Servo
-The car is driven by two parallax continuous rotation servos, which are controlled by an Arduino Uno. The servo can be controlled by writing its duty cycle using Arduino servo libriray. Before mounted to the car, the servos should be calibrated by adjusting the  potentiometer in the servo using a screwdriver, while the "stay-still" signal is sending to the servo. After doing that, the servo will rotate forward if its duty cycle is set above the stay-still signal, while it will rotate reversely if the duty cycle is lower than that. 
+The car is driven by two parallax continuous rotation servos, which are controlled by an Arduino Uno. The servo can be controlled by writing its duty cycle using Arduino `<servo.h>` libriray. Before mounted to the car, the servos should be calibrated by adjusting the  potentiometer in the servo using a screwdriver, while the "stay-still" signal is sending to the servo. After doing that, the servo will rotate forward if its duty cycle is set above the stay-still signal, while it will rotate reversely if the duty cycle is lower than that. 
 
 #### Movement Command
 The car can take five command: forward, backward, turn left, turn right and pick the garbage, and we control the moving distance of the car by setting the time interval between the rotation signal and stay-still signal. 
