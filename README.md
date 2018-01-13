@@ -22,3 +22,7 @@ When designing the scheme of controlling the car's movement, we considered 2 dif
 #### path
 One big problem of moving the car to pick up the garbage is to find an appropriate path. Since we do not have an extra camera on the car, it is impossible for the car to know where to go and we have to calculate the path for the car so that it can get to the right position. However, the direction of car can not be directly detected by the camera and it is changing all the time. Therefore, we record the original direction of the car at the inital stage, and recalculate it when the car moves.
 
+### Communication
+#### BLE module
+
+
