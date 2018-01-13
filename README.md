@@ -1,36 +1,6 @@
 # 2017Fall-SmartGarbageCar
 
-## Usage
+## Motivation
+We got inspiration of this project from the video of an autonomous trash can on wheels that can position itself underneath pieces of garbage one tosses in its general vicinity. This original work is based on wireless communication with MicroSoft's motion sensing camera and a powerful program that can predict where the garbage will land. In consideration of our limited devices, we proposed this project to design a smart garbage car that can detect and clean up garbages in a small area. And we implemented it with technique of BLE and openCV.
 
-set rpi address
-```
-DEVICE_ADDRESS = < rpi address >
-```
-writing value to GATT characteristic event instance
-```
-e = writeEvent()
-```
-connect arduino through HM-10 module
-```
-thread = myThread(e, DEVICE_ADDRESS)
-thread.start()
-```
-control car:
-
-go forward: F + 4 bits integer (e.g. F0050: go forward for 5000 ms)
-
-go backward: B + 4 bits integer
-
-turn left: L1
-
-turn right: R1
-
-pick up garbage: P
-
-e.g. F0050B0020L0R1P == forward for 5000ms -> backward for 2000ms -> turn right -> pick garbage
-
-```
-str = "F0050B0020L0R1P"
-e.set_str(str)
-e.set()
-```
+## Implement
