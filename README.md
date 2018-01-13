@@ -19,10 +19,15 @@ When designing the scheme of controlling the car's movement, we considered 2 dif
 
 #### Trash detection
 The method we are using for trash detection is based on background subtraction. We use the MOG background subtraction detector provided by OpenCV: `cv2.createBackgroundSubtractorMOG` in detection. Therefore, the program requires an initial trash-free background during initialization stage. When a trash is detected, the detection is memorized until the system detects that the car move to the trash for pickup.
+![trash detection](images/图片2.png)
+This is the picture of the detection while the left picture is the raw image seen by the camera and the background subtracted image is on the right. Notice that when a trash stay still for enough of time, it is considered as the background itself. Solving this problem require a initial picture of a clean background to do difference alongside by the subtractor.
 
-![trash-detection]()
+![alt text](images/图片3.png)
+
 
 #### Navigation
+
+#### path
 One big problem of moving the car to pick up the garbage is to find an appropriate path. Since we do not have an extra camera on the car, it is impossible for the car to know where to go and we have to calculate the path for the car so that it can get to the right position. However, the direction of car can not be directly detected by the camera and it is changing all the time. Therefore, we record the original direction of the car at the inital stage, and recalculate it when the car moves.
 
 In this project, we first use a method of calculating the running average of the image provided by the camera, and use the image difference to detect the inital location of the car. Assuming that the car is in the view at the first place, such detection is done by calling the car to rotate a full cycle. After that we use the Median Flow tracker provided by OpenCV to track the movement of the car. Such tracker can be replaced by using Machine Learning technique to train a specific classifier for more accurate tracking and better detection in practice.
@@ -35,7 +40,22 @@ Also, in order to provide a better navigation path, calibration of the camera is
 The Raspberry Pi and Arduino communicate with each other over BLE connection. In this project, the Arduino works as a BLE peripheral and provide GATT service, while the Raspberry Pi works as a central and a client. The transmission of information is implemented writing value to a GATT characteristic.
 #### BLE module
 We use an HM10 module to make the arduino work as a BLE peripheral. HM10 has 6 pins and we only need 4 of them in this case. The RX and TX pin are connected to Arduino digital pins. The VCC and GND pin are also connected to 5V and GND on the Arduino respectively. 
+
 ![alt text][img]
 
 [img]:http://fab.cba.mit.edu/classes/863.15/doc/tutorials/programming/bluetooth/bluetooth2.jpg "HM10 module"
-The HM10 module provides
+
+The HM10 module can be configured using its provided set of AT commands. There are some useful AT commands that we used when setting up BLE connection.
+
+- AT+ADDR?: get the address of HM10 module
+- AT+BAUD9600: set the baud rate to 9600 (BLE default)
+- AT+ROLE0: set its role as BLE peripheral
+- AT+UUID?: get the uuid of its provided service
+- AT+FFE2: add a second characteristic to its service. 
+
+By default, there is a single custom characteristic under a custom service provided by the HM10 module, and we can add a second write only characteristic using the AT command mentioned above. After configuration, the Arduino can get commands from Raspberry Pi by reading the value of that characteristic.
+
+#### GATT programming
+The program of implementing the RPi as a BLE center is based on `pygatt` library, which provides a Pythonic API by wrapping up gatttool command line utility. 
+
+To connect the raspberry pi with HM10 module, 
