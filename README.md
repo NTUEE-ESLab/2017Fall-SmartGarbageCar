@@ -16,8 +16,20 @@ The car can take five command: forward, backward, turn left, turn right and pick
 When designing the scheme of controlling the car's movement, we considered 2 different plans. The first one is sending it the angle and distance between the itself and the garbage, but we found it quite difficult to control the car to turn a degree precisely, because the surface of both the wheels and the ground are very smooth and the fictional force is not enough. And sometimes they get stuck when a rotation signal is received. So we decided not to change its direction by the degree of angles and switch to the second plan. In the plan B, we control the car to move only horizontoally or vertically regarding to its former direction. And the only rotation angle is 90 degree, which is much easier to tune in the Arduino code. 
 
 ### Detection
-#### path
+
+#### Trash detection
+The method we are using for trash detection is based on background subtraction. We use the MOG background subtraction detector provided by OpenCV: `cv2.createBackgroundSubtractorMOG` in detection. Therefore, the program requires an initial trash-free background during initialization stage. When a trash is detected, the detection is memorized until the system detects that the car move to the trash for pickup.
+
+![trash-detection]()
+
+#### Navigation
 One big problem of moving the car to pick up the garbage is to find an appropriate path. Since we do not have an extra camera on the car, it is impossible for the car to know where to go and we have to calculate the path for the car so that it can get to the right position. However, the direction of car can not be directly detected by the camera and it is changing all the time. Therefore, we record the original direction of the car at the inital stage, and recalculate it when the car moves.
+
+In this project, we first use a method of calculating the running average of the image provided by the camera, and use the image difference to detect the inital location of the car. Assuming that the car is in the view at the first place, such detection is done by calling the car to rotate a full cycle. After that we use the Median Flow tracker provided by OpenCV to track the movement of the car. Such tracker can be replaced by using Machine Learning technique to train a specific classifier for more accurate tracking and better detection in practice.
+
+![tracker]()
+
+Also, in order to provide a better navigation path, calibration of the camera is needed. It requires a chessboard-like object which size is known in advance to calibrate and calculate the homography between the camera view and real world. In this project we used a [7x9 chessboard](https://www.mrpt.org/downloads/camera-calibration-checker-board_9x7.pdf) from the web to calibrate.
 
 ### Communication
 The Raspberry Pi and Arduino communicate with each other over BLE connection. In this project, the Arduino works as a BLE peripheral and provide GATT service, while the Raspberry Pi works as a central and a client. The transmission of information is implemented writing value to a GATT characteristic.
