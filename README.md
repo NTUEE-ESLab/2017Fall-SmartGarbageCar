@@ -78,3 +78,7 @@ device.char_write(uuid, in_buf[:20])
 Since it is very likely that the openCV program is not in the same file as the pygatt code, this part is implemented using multi-thread technique as a bridge between two parts of the program. (Although we coded them into the same file in the end, we kept the multi-thread part.)
 
 ![alt text](images/img4.png)
+
+To communicate with the main thread, we define a writing event. The main thread will wait for the event and start to process it after the event is set.
+
+Because Arduino communications with the HM10 module over serial connections and it reads information as a sequence of chars, so the commands sent from RPi to Arduino are encoded as a formed sequence of chars, which will be decoded char by char in the Arduino program.
