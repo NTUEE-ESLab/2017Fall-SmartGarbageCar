@@ -19,7 +19,9 @@ When designing the scheme of controlling the car's movement, we considered 2 dif
 
 #### Trash detection
 The method we are using for trash detection is based on background subtraction. We use the MOG background subtraction detector provided by OpenCV: `cv2.createBackgroundSubtractorMOG` in detection. Therefore, the program requires an initial trash-free background during initialization stage. When a trash is detected, the detection is memorized until the system detects that the car move to the trash for pickup.
+
 ![trash detection](images/图片2.png)
+
 This is the picture of the detection while the left picture is the raw image seen by the camera and the background subtracted image is on the right. Notice that when a trash stay still for enough of time, it is considered as the background itself. Solving this problem require a initial picture of a clean background to do difference alongside by the subtractor.
 
 ![alt text](images/图片3.png)
